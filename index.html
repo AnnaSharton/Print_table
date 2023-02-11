@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print My Table</title>
+    <style>
+        body {padding: 1% 5%;}
+        table {width:100%;}
+        table, td, th {border: 1px #cfcaca solid; border-collapse: collapse;}
+        td, th {padding: 3px;}
+        button {margin-top: 10px; padding: 10px; background: #0D6EFD; border: none; color: white; border-radius: 3px;}       
+    </style>
+</head>
+<body>
+    <table id="table">
+        <tr id="thead">
+            <th>-</th>
+            <th>ID</th>
+            <th>Фамилия И.О.</th>
+            <th>Дата рождения</th>
+            <th>Действия</th>
+        </tr>     
+    </table>
+
+    <a href="#" onClick="printTable()"><button id="button">Печать</button></a>
+
+    <script>
+        var arrUsers = [ //массив с данными для таблицы 
+            {id: 6611, name: 'Ленин В.И.',    dateBirth: '22.04.1870'},
+            {id: 5511, name: 'Васина А.А.',   dateBirth: '11.12.2001'},
+            {id: 4411, name: 'Смирнова П.И.', dateBirth: '10.09.1966'},
+            {id: 3311, name: 'Петров И.Л.',   dateBirth: '13.03.1999'},
+            {id: 8811, name: 'Фёдоров A.Ф.',  dateBirth: '21.05.1970'},
+            {id: 2211, name: 'Иванов И.И.',   dateBirth: '1.01.2000' },
+            {id: 7711, name: 'Михайлов C.C.', dateBirth: '2.07.1996' }
+        ]; console.log(arrUsers[0]['name']);
+        var thead = document.getElementById('thead'); //определяю в переменную строку table head из html
+
+        for (let i=0; i<arrUsers.length; i++) { //циклом вывожу все строки таблицы
+            thead.insertAdjacentHTML("afterend", 
+            `<tr><td><input type='checkbox' class="checkId" id='${arrUsers[i]['id']}'></td><td>${arrUsers[i]['id']}</td><td>${arrUsers[i]['name']}</td><td>${arrUsers[i]['dateBirth']}</td><td>---</td></tr>`);
+        }
+
+        let checkId = document.querySelectorAll('.checkId'); //выбираю все выбранные чекбоксы
+
+
+
+        function printTable() { //ф-ия вывода окна печати
+            
+
+            var mywindow = window.open('', 'PRINT', 'height=600,width=800');
+
+            mywindow.document.write('<html><head><title>' + document.title  + 
+                `</title><style> 
+                        table, td, th {border: 1px #cfcaca solid; border-collapse: collapse;}
+                        td, th {padding: 5px;}
+                    </style>`);
+            mywindow.document.write('</head><body>');
+            mywindow.document.write('<table>');
+            mywindow.document.write('<tr><th>№</th><th>ID</th><th>ФИО</th><th>Дата рождения</th></tr>');
+            
+            let num = 1; //делаю непрерывную нумерацию начиная с 1
+            for (let i=0; i<arrUsers.length; i++) { //циклом вывожу все строки таблицы
+                
+                if (checkId[i].checked) { 
+                    mywindow.document.write( //если да, то записываю в документ строки
+                `<tr>
+                    <td> ${num++} </td>
+                    <td> ${arrUsers[i]['id']} </td>
+                    <td> ${arrUsers[i]['name']} </td>
+                    <td> ${arrUsers[i]['dateBirth']} </td>
+                </tr>`
+                );
+            } else {}
+            }
+
+            mywindow.document.write('</table>');
+            mywindow.document.write('</body></html>');
+
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10*/
+
+            mywindow.print();
+            mywindow.close();
+
+            return true;
+        }
+
+    </script>
+</body>
+</html>
